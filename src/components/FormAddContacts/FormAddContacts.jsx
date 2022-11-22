@@ -1,14 +1,19 @@
 import { Formik, ErrorMessage } from 'formik';
 import { nanoid } from 'nanoid';
+import Notiflix from 'notiflix';
 import * as Yup from 'yup';
 import 'yup-phone';
 import { Form, Field, Button } from './FormAddContacts.styled';
-import PropTypes from 'prop-types';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from 'redux/contactSlice';
 const initialValues = {
     name: '',
     phoneNumber: '',
 };
-export function FormAddContacts({ addContacts }) {
+export function FormAddContacts() {
+    const dispatch = useDispatch();
+    const contacts = useSelector(state => state.contacts);
     const validationSchema = Yup.object({
         name: Yup.string().required().max(40).trim(),
         phoneNumber: Yup.string().phone('UA', true).required(),
@@ -22,8 +27,15 @@ export function FormAddContacts({ addContacts }) {
             name: name,
             number: phoneNumber,
         };
+        contacts.find(
+            contact =>
+                contact.name.toLowerCase() === newContact.name.toLowerCase()
+        )
+            ? Notiflix.Notify.failure(
+                  `${newContact.name} is already in contacts.`
+              )
+            : dispatch(addContact(newContact));
 
-        addContacts(newContact);
         actions.resetForm();
     };
     return (
@@ -59,7 +71,3 @@ export function FormAddContacts({ addContacts }) {
         </Formik>
     );
 }
-
-FormAddContacts.propTypes = {
-    addContacts: PropTypes.func.isRequired,
-};

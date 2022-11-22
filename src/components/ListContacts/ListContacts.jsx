@@ -1,6 +1,18 @@
-import PropTypes from 'prop-types';
+
+import { useSelector, useDispatch } from 'react-redux';
 import { List, Item, Name, DeleteBtn } from './ListContact.styled';
-export const ListContacts = ({ visiableTodos, removeContacts }) => {
+import { removeContacts } from 'redux/contactSlice';
+export const ListContacts = () => {
+    const dispatch = useDispatch();
+    const contacts = useSelector(state => state.contacts);
+    const query = useSelector(state => state.filter);
+
+     function getvisiableTodos ()  {
+         return contacts.filter(({ name }) =>
+             name.toLowerCase().includes(query.toLowerCase())
+         );
+    };
+    const visiableTodos = getvisiableTodos()
     return (
         <List>
             {visiableTodos.map(({ id, name, number }) => (
@@ -10,7 +22,7 @@ export const ListContacts = ({ visiableTodos, removeContacts }) => {
                     <DeleteBtn
                         id={id}
                         onClick={e => {
-                            removeContacts(e.target.id);
+                            dispatch(removeContacts(e.target.id));
                         }}
                     >
                         delete
@@ -20,7 +32,4 @@ export const ListContacts = ({ visiableTodos, removeContacts }) => {
         </List>
     );
 };
-ListContacts.propTypes = {
-    visiableTodos: PropTypes.array.isRequired,
-    removeContacts: PropTypes.func.isRequired,
-};
+

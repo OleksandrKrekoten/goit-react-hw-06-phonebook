@@ -1,8 +1,13 @@
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { filteredContacts } from 'redux/contactSlice';
 
-export const SearchForm = ({ onSearch }) => {
-    return <input type="text" onChange={onSearch} placeholder="Search" />;
-};
-SearchForm.propTypes = {
-    onSearch: PropTypes.func.isRequired,
+export const SearchForm = () => {
+    const dispatch = useDispatch();
+    return (
+        <input
+            type="text"
+            onChange={e => dispatch(filteredContacts(e.target.value))}
+            placeholder="Search"
+        />
+    );
 };
