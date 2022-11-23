@@ -13,7 +13,7 @@ const initialValues = {
 };
 export function FormAddContacts() {
     const dispatch = useDispatch();
-    const contacts = useSelector(state => state.contacts);
+    const contacts = useSelector(state => state.contacts.contacts);
     const validationSchema = Yup.object({
         name: Yup.string().required().max(40).trim(),
         phoneNumber: Yup.string().phone('UA', true).required(),
