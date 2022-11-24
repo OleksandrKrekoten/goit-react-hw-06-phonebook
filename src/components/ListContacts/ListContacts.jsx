@@ -1,17 +1,17 @@
-
 import { useSelector, useDispatch } from 'react-redux';
 import { List, Item, Name, DeleteBtn } from './ListContact.styled';
 import { removeContacts } from 'redux/contactSlice';
 export const ListContacts = () => {
     const dispatch = useDispatch();
-    const contacts = useSelector(state => state.contacts.contacts);
-    const query = useSelector(state => state.filter);
-     function getvisiableTodos ()  {
-         return contacts.filter(({ name }) =>
-             name.toLowerCase().includes(query.toLowerCase())
-         );
-    };
-    const visiableTodos = getvisiableTodos()
+    const contacts = useSelector(state => state.persistedRoot.contacts);
+
+    const query = useSelector(state => state.persistedRoot.filter);
+    function getvisiableTodos() {
+        return contacts.filter(({ name }) =>
+            name.toLowerCase().includes(query.toLowerCase())
+        );
+    }
+    const visiableTodos = getvisiableTodos();
     return (
         <List>
             {visiableTodos.map(({ id, name, number }) => (
@@ -31,4 +31,3 @@ export const ListContacts = () => {
         </List>
     );
 };
-

@@ -17,17 +17,15 @@ const persistConfig = {
     blacklist: ['filter'],
 };
 
-
-
 const rootReducer = combineReducers({
     contacts: contactSlice.reducer,
     filter: filterSlice.reducer,
 });
-const persistedRootReducer = persistReducer(persistConfig, rootReducer);
+const persistedRoot = persistReducer(persistConfig, rootReducer);
+
 export const store = configureStore({
     reducer: {
-        contacts: persistedRootReducer,
-        filter: filterSlice.reducer,
+        persistedRoot,
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({
