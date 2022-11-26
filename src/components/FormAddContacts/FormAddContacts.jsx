@@ -4,7 +4,7 @@ import Notiflix from 'notiflix';
 import * as Yup from 'yup';
 import 'yup-phone';
 import { Form, Field, Button } from './FormAddContacts.styled';
-
+import { selectContacts } from 'redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'redux/contactSlice';
 const initialValues = {
@@ -13,7 +13,7 @@ const initialValues = {
 };
 export function FormAddContacts() {
     const dispatch = useDispatch();
-    const contacts = useSelector(state => state.persistedRoot.contacts);
+    const contacts = useSelector(selectContacts);
     const validationSchema = Yup.object({
         name: Yup.string().required().max(40).trim(),
         phoneNumber: Yup.string().phone('UA', true).required(),
